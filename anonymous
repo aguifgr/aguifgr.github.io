@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Anonymous Terminal</title>
+
+<style>
+body {
+    margin: 0;
+    background: black;
+    overflow: hidden;
+    color: #00ff00;
+    font-family: "Courier New", monospace;
+}
+
+/* MATRIX BACKGROUND */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* TERMINAL BOX */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 900px;
+    border: 1px solid #00ff00;
+    padding: 30px;
+    box-shadow: 0 0 25px #00ff00;
+    background: rgba(0,0,0,0.85);
+}
+
+/* GLITCH TITLE */
+h1 {
+    text-align: center;
+    font-size: 40px;
+    animation: glitch 1s infinite;
+}
+
+@keyframes glitch {
+    0% { text-shadow: 2px 2px red; }
+    25% { text-shadow: -2px -2px blue; }
+    50% { text-shadow: 2px -2px lime; }
+    75% { text-shadow: -2px 2px cyan; }
+    100% { text-shadow: 2px 2px red; }
+}
+
+#text {
+    white-space: pre-line;
+    font-size: 18px;
+}
+
+.cursor {
+    display: inline-block;
+    width: 10px;
+    background: #00ff00;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+
+a {
+    color: #00ff00;
+    text-decoration: none;
+    border: 1px solid #00ff00;
+    padding: 10px 20px;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+a:hover {
+    background: #00ff00;
+    color: black;
+    box-shadow: 0 0 15px #00ff00;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+<h1>ANONYMOUS ACCESS</h1>
+<div id="text"></div><span class="cursor"></span>
+<center>
+<br>
+<a href="https://discord.gg/EAmRExAN" target="_blank">ENTRAR NO DISCORD</a>
+</center>
+</div>
+
+<script>
+/* MATRIX EFFECT */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+let letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+letters = letters.split("");
+
+let fontSize = 14;
+let columns = canvas.width / fontSize;
+let drops = [];
+
+for(let x = 0; x < columns; x++)
+    drops[x] = 1;
+
+function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0F0";
+    ctx.font = fontSize + "px monospace";
+
+    for(let i = 0; i < drops.length; i++) {
+        let text = letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+        if(drops[i]*fontSize > canvas.height && Math.random() > 0.975)
+            drops[i] = 0;
+
+        drops[i]++;
+    }
+}
+
+setInterval(draw, 33);
+
+/* TYPING EFFECT */
+const content = `
+> Iniciando protocolo SCP...
+
+SCP-999:
+Entidade gelatinosa amigável.
+Capaz de gerar felicidade extrema.
+Alta prioridade para proteção.
+
+SCP-001:
+Arquivo ultra confidencial.
+Múltiplas propostas classificadas.
+
+SCP-IA-404:
+Inteligência Artificial autoconsciente.
+Capaz de modificar seu próprio código.
+Risco potencial: evolução independente.
+
+> Hacker ético ativo.
+> Sistema seguro.
+> Conhecimento é poder.
+`;
+
+let i = 0;
+let speed = 25;
+let textElement = document.getElementById("text");
+
+function typeWriter() {
+    if (i < content.length) {
+        textElement.innerHTML += content.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+    }
+}
+
+typeWriter();
+
+/* KEYBOARD SOUND */
+document.addEventListener("keydown", () => {
+    let audio = new Audio("https://www.soundjay.com/mechanical/sounds/keyboard-1.mp3");
+    audio.volume = 0.1;
+    audio.play();
+});
+</script>
+
+</body>
+</html>
